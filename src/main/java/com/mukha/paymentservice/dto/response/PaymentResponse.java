@@ -1,0 +1,22 @@
+package com.mukha.paymentservice.dto.response;
+
+import com.mukha.paymentservice.model.status.PaymentStatus;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+
+public record PaymentResponse(
+
+        Long id,
+
+        Long orderId,
+
+        Long userId,
+
+        PaymentStatus status,
+
+        Instant timestamp,
+
+        BigDecimal paymentAmount) {
+
+}

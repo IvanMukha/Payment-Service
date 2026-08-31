@@ -4,6 +4,8 @@ import com.mukha.paymentservice.client.RandomNumberClient;
 import com.mukha.paymentservice.dto.request.CreatePaymentRequest;
 import com.mukha.paymentservice.dto.response.PaymentResponse;
 import com.mukha.paymentservice.exception.InvalidDateRangeException;
+import com.mukha.paymentservice.kafka.PaymentEventProducer;
+import com.mukha.paymentservice.kafka.event.PaymentCreatedEvent;
 import com.mukha.paymentservice.mapper.PaymentMapper;
 import com.mukha.paymentservice.model.Payment;
 import com.mukha.paymentservice.model.status.PaymentStatus;
@@ -25,8 +27,8 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
     private final RandomNumberClient randomNumberClient;
+    private final PaymentEventProducer paymentEventProducer;
 
-    @Override
     public PaymentResponse createPayment(CreatePaymentRequest createPaymentRequest) {
         String randomNumber = randomNumberClient.getRandomInteger(1, 1, 100, 1, 10, "plain").trim();
         PaymentStatus paymentStatus = Integer.parseInt(randomNumber) % 2 == 0 ?
@@ -39,6 +41,14 @@ public class PaymentServiceImpl implements PaymentService {
 
         Payment result = paymentRepository.save(payment);
         log.debug("Successfully create payment with id: {}", result.getId());
+
+        paymentEventProducer.sendPaymentCreatedEvent(new PaymentCreatedEvent(
+                result.getOrderId(),
+                result.getUserId(),
+                result.getStatus().name(),
+                result.getPaymentAmount(),
+                result.getTimestamp()));
+
         return paymentMapper.toResponse(result);
     }
 

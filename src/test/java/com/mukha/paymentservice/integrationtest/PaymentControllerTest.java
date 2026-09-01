@@ -42,7 +42,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
         when(randomNumberClient.getRandomInteger(1, 1, 100, 1, 10, "plain")).thenReturn("42");
         CreatePaymentRequest request = new CreatePaymentRequest(1L, 2L, BigDecimal.valueOf(150));
 
-        mockMvc.perform(post("/api/v1/payments")
+        mockMvc.perform(post("/v1/api/payments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -60,7 +60,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
         when(randomNumberClient.getRandomInteger(1, 1, 100, 1, 10, "plain")).thenReturn("41");
         CreatePaymentRequest request = new CreatePaymentRequest(1L, 2L, BigDecimal.valueOf(150));
 
-        mockMvc.perform(post("/api/v1/payments")
+        mockMvc.perform(post("/v1/api/payments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -72,7 +72,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     void createPaymentShouldReturnBadRequestWhenPaymentAmountIsNegative() throws Exception {
         CreatePaymentRequest request = new CreatePaymentRequest(1L, 2L, BigDecimal.valueOf(-10));
 
-        mockMvc.perform(post("/api/v1/payments")
+        mockMvc.perform(post("/v1/api/payments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -84,7 +84,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     void createPaymentShouldReturnBadRequestWhenOrderIdIsMissing() throws Exception {
         String requestJson = "{\"userId\":2,\"paymentAmount\":100}";
 
-        mockMvc.perform(post("/api/v1/payments")
+        mockMvc.perform(post("/v1/api/payments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -95,7 +95,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     void createPaymentShouldReturnUnauthorizedWhenUserIsNotAuthenticated() throws Exception {
         CreatePaymentRequest request = new CreatePaymentRequest(1L, 2L, BigDecimal.valueOf(150));
 
-        mockMvc.perform(post("/api/v1/payments")
+        mockMvc.perform(post("/v1/api/payments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isUnauthorized());
@@ -106,7 +106,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     void createPaymentShouldReturnForbiddenWhenUserLacksRequiredAuthority() throws Exception {
         CreatePaymentRequest request = new CreatePaymentRequest(1L, 2L, BigDecimal.valueOf(150));
 
-        mockMvc.perform(post("/api/v1/payments")
+        mockMvc.perform(post("/v1/api/payments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isForbidden());
@@ -118,7 +118,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
         savePayment(1L, 2L, PaymentStatus.SUCCESS, BigDecimal.valueOf(100));
         savePayment(3L, 4L, PaymentStatus.FAILED, BigDecimal.valueOf(200));
 
-        mockMvc.perform(get("/api/v1/payments")
+        mockMvc.perform(get("/v1/api/payments")
                         .param("userId", "2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
@@ -128,7 +128,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     @Test
     @WithMockUser(authorities = "admin")
     void getPaymentsShouldReturnEmptyPageWhenNothingMatches() throws Exception {
-        mockMvc.perform(get("/api/v1/payments")
+        mockMvc.perform(get("/v1/api/payments")
                         .param("userId", "999"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(0));
@@ -144,7 +144,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
         Instant from = Instant.now().minus(1, ChronoUnit.DAYS);
         Instant to = Instant.now().plus(1, ChronoUnit.DAYS);
 
-        mockMvc.perform(get("/api/v1/payments/user/2/total")
+        mockMvc.perform(get("/v1/api/payments/user/2/total")
                         .param("from", from.toString())
                         .param("to", to.toString()))
                 .andExpect(status().isOk())
@@ -157,7 +157,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
         Instant from = Instant.now().minus(1, ChronoUnit.DAYS);
         Instant to = Instant.now().plus(1, ChronoUnit.DAYS);
 
-        mockMvc.perform(get("/api/v1/payments/user/999/total")
+        mockMvc.perform(get("/v1/api/payments/user/999/total")
                         .param("from", from.toString())
                         .param("to", to.toString()))
                 .andExpect(status().isOk())
@@ -170,7 +170,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
         Instant from = Instant.now();
         Instant to = from.minus(1, ChronoUnit.DAYS);
 
-        mockMvc.perform(get("/api/v1/payments/user/2/total")
+        mockMvc.perform(get("/v1/api/payments/user/2/total")
                         .param("from", from.toString())
                         .param("to", to.toString()))
                 .andExpect(status().isBadRequest());
@@ -186,7 +186,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
         Instant from = Instant.now().minus(1, ChronoUnit.DAYS);
         Instant to = Instant.now().plus(1, ChronoUnit.DAYS);
 
-        mockMvc.perform(get("/api/v1/payments/total")
+        mockMvc.perform(get("/v1/api/payments/total")
                         .param("from", from.toString())
                         .param("to", to.toString()))
                 .andExpect(status().isOk())
@@ -199,7 +199,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
         Instant from = Instant.now().minus(1, ChronoUnit.DAYS);
         Instant to = Instant.now().plus(1, ChronoUnit.DAYS);
 
-        mockMvc.perform(get("/api/v1/payments/total")
+        mockMvc.perform(get("/v1/api/payments/total")
                         .param("from", from.toString())
                         .param("to", to.toString()))
                 .andExpect(status().isForbidden());

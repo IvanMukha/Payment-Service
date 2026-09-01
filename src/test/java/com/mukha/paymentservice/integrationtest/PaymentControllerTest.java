@@ -37,7 +37,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "user")
+    @WithMockUser(authorities = "admin")
     void createPaymentShouldReturnCreatedWhenRequestIsValid() throws Exception {
         when(randomNumberClient.getRandomInteger(1, 1, 100, 1, 10, "plain")).thenReturn("42");
         CreatePaymentRequest request = new CreatePaymentRequest(1L, 2L, BigDecimal.valueOf(150));
@@ -55,7 +55,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "user")
+    @WithMockUser(authorities = "admin")
     void createPaymentShouldReturnFailedStatusWhenRandomNumberIsOdd() throws Exception {
         when(randomNumberClient.getRandomInteger(1, 1, 100, 1, 10, "plain")).thenReturn("41");
         CreatePaymentRequest request = new CreatePaymentRequest(1L, 2L, BigDecimal.valueOf(150));
@@ -68,7 +68,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "user")
+    @WithMockUser(authorities = "admin")
     void createPaymentShouldReturnBadRequestWhenPaymentAmountIsNegative() throws Exception {
         CreatePaymentRequest request = new CreatePaymentRequest(1L, 2L, BigDecimal.valueOf(-10));
 
@@ -80,7 +80,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "user")
+    @WithMockUser(authorities = "admin")
     void createPaymentShouldReturnBadRequestWhenOrderIdIsMissing() throws Exception {
         String requestJson = "{\"userId\":2,\"paymentAmount\":100}";
 
@@ -135,7 +135,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "user")
+    @WithMockUser(authorities = "admin")
     void getTotalForCurrentUserShouldReturnSumOfSuccessfulPayments() throws Exception {
         savePayment(1L, 2L, PaymentStatus.SUCCESS, BigDecimal.valueOf(100));
         savePayment(2L, 2L, PaymentStatus.SUCCESS, BigDecimal.valueOf(50));
@@ -152,7 +152,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "user")
+    @WithMockUser(authorities = "admin")
     void getTotalForCurrentUserShouldReturnZeroWhenNoPaymentsFound() throws Exception {
         Instant from = Instant.now().minus(1, ChronoUnit.DAYS);
         Instant to = Instant.now().plus(1, ChronoUnit.DAYS);
@@ -165,7 +165,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @WithMockUser(authorities = "user")
+    @WithMockUser(authorities = "admin")
     void getTotalForCurrentUserShouldReturnBadRequestWhenFromIsAfterTo() throws Exception {
         Instant from = Instant.now();
         Instant to = from.minus(1, ChronoUnit.DAYS);

@@ -123,6 +123,8 @@ class PaymentServiceImplTest {
 
     @Test
     void createPaymentShouldSetTimestampBeforeSaving() {
+        savedPayment.setStatus(PaymentStatus.SUCCESS);
+
         when(randomNumberClient.getRandomInteger(1, 1, 100, 1, 10, "plain")).thenReturn("42");
         when(paymentMapper.toEntity(createPaymentRequest)).thenReturn(payment);
         when(paymentRepository.save(payment)).thenReturn(savedPayment);
@@ -157,6 +159,8 @@ class PaymentServiceImplTest {
 
     @Test
     void createPaymentShouldReturnMappedResponse() {
+        savedPayment.setStatus(PaymentStatus.SUCCESS);
+
         when(randomNumberClient.getRandomInteger(1, 1, 100, 1, 10, "plain")).thenReturn("42");
         when(paymentMapper.toEntity(createPaymentRequest)).thenReturn(payment);
         when(paymentRepository.save(payment)).thenReturn(savedPayment);

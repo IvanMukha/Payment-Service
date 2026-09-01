@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @RestController
-@RequestMapping("/api/v1/payments")
+@RequestMapping("/v1/api/payments")
 @RequiredArgsConstructor
 public class PaymentController {
 

@@ -35,6 +35,19 @@
                 { "name": "idx_timestamp_desc" }
             </mongodb:options>
         </mongodb:createIndex>
+
+        <mongodb:createIndex collectionName="payments">
+            <mongodb:keys>
+                { order_id: 1 }
+            </mongodb:keys>
+            <mongodb:options>
+                {
+                name: "idx_unique_success_payment_per_order",
+                unique: true,
+                partialFilterExpression: { status: "SUCCESS" }
+                }
+            </mongodb:options>
+        </mongodb:createIndex>
     </changeSet>
 </databaseChangeLog>
 

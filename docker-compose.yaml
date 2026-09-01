@@ -79,7 +79,5 @@ volumes:
   payment-kafka-data:
 
 networks:
-  payment-network:
-    driver: bridge
   innowise-network:
-    external: true
+    driver: bridge

@@ -38,7 +38,7 @@ public class PaymentController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('admin', 'user')")
+    @PreAuthorize("hasAuthority('admin') or @paymentSecurity.isOwner(#userId)")
     public ResponseEntity<Page<PaymentResponse>> getPayments(
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) Long orderId,

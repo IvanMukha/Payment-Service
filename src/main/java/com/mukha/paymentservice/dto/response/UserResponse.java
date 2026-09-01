@@ -1,8 +1,11 @@
 package com.mukha.paymentservice.dto.response;
 
-public record UserResponse(
+import java.util.UUID;
 
+public record UserResponse(
         Long id,
+
+        UUID keycloakUUID,
 
         String name,
 

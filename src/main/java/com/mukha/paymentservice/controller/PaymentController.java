@@ -49,7 +49,7 @@ public class PaymentController {
     }
 
     @GetMapping("/user/{userId}/total")
-    @PreAuthorize("hasAnyAuthority('admin', 'user')")
+    @PreAuthorize("hasAuthority('admin') or @paymentSecurity.isOwner(#userId)")
     public ResponseEntity<BigDecimal> getTotalForCurrentUser(
             @PathVariable Long userId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant from,

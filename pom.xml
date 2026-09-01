@@ -35,6 +35,8 @@
         <spring-cloud.version>2025.1.2</spring-cloud.version>
         <liquibase-mongodb.version>5.0.4</liquibase-mongodb.version>
         <restclient.version>4.2.0-M1</restclient.version>
+        <testcontainers.version>2.0.5</testcontainers.version>
+        <mongoContainer.version>1.21.4</mongoContainer.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -45,14 +47,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-kafka</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-liquibase</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mongodb</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc</artifactId>
@@ -87,6 +85,10 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.liquibase.ext</groupId>
@@ -124,6 +126,27 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>mongodb</artifactId>
+        <version>${mongoContainer.version}</version>
+        <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

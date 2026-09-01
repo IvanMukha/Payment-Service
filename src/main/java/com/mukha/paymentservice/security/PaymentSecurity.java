@@ -1,7 +1,6 @@
 package com.mukha.paymentservice.security;
 
 import com.mukha.paymentservice.client.UserServiceClient;
-import com.mukha.paymentservice.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

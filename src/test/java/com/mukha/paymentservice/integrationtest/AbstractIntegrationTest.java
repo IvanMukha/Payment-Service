@@ -2,6 +2,7 @@ package com.mukha.paymentservice.integrationtest;
 
 import com.mukha.paymentservice.client.RandomNumberClient;
 import com.mukha.paymentservice.client.UserServiceClient;
+import com.mukha.paymentservice.config.LiquibaseConfig;
 import com.mukha.paymentservice.kafka.PaymentEventProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,4 +52,7 @@ public abstract class AbstractIntegrationTest {
 
     @MockitoBean
     protected UserServiceClient userServiceClient;
+
+    @MockitoBean
+    private LiquibaseConfig liquibaseConfig;
 }

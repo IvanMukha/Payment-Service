@@ -11,8 +11,10 @@ services:
     ports:
       - "8082:8080"
     environment:
-      MONGODB_URI: mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}
-      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      SPRING_DATA_MONGODB_URI: ${MONGODB_URI}
+      SPRING_LIQUIBASE_MONGODB_URL: ${MONGODB_URI}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      SPRING_DATA_MONGODB_DATABASE: ${MONGO_DATABASE}
 
       API_GATEWAY_URL: ${API_GATEWAY_URL}
       RANDOM_NUMBER_CLIENT_URL: ${RANDOM_NUMBER_CLIENT_URL}
@@ -30,8 +32,7 @@ services:
       kafka:
         condition: service_healthy
     networks:
-      - payment-network
-      - shared-network
+      - innowise-network
 
   payment-service-mongodb:
     image: mongo:7
@@ -47,32 +48,36 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - payment-network
+      - innowise-network
 
   kafka:
-    image: bitnami/kafka:3.7
+    image: apache/kafka:4.0.1
     container_name: kafka
     restart: unless-stopped
     environment:
-      KAFKA_CFG_NODE_ID: 1
-      KAFKA_CFG_PROCESS_ROLES: controller,broker
-      KAFKA_CFG_LISTENERS: ${KAFKA_LISTENERS}
-      KAFKA_CFG_ADVERTISED_LISTENERS: ${KAFKA_ADVERTISED_LISTENERS}
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: ${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP}
-      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: ${KAFKA_CONTROLLER_QUORUM_VOTERS}
-      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_KRAFT_CLUSTER_ID: NmJhZjJiZjItZjE4NC00
-      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: controller,broker
+      KAFKA_LISTENERS: ${KAFKA_LISTENERS}
+      KAFKA_ADVERTISED_LISTENERS: ${KAFKA_ADVERTISED_LISTENERS}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: ${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP}
+      KAFKA_CONTROLLER_QUORUM_VOTERS: ${KAFKA_CONTROLLER_QUORUM_VOTERS}
+      KAFKA_CLUSTER_ID: ${KAFKA_KRAFT_CLUSTER_ID}
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
-      - payment-kafka-data:/bitnami/kafka
+      - payment-kafka-data:/var/lib/kafka/data
     healthcheck:
-      test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      test: [ "CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list" ]
       interval: 10s
       timeout: 5s
       retries: 10
     networks:
-      - payment-network
+      - innowise-network
 
 volumes:
   payment-mongodb-data:

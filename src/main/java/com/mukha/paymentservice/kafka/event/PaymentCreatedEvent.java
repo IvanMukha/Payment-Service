@@ -9,11 +9,11 @@ public record PaymentCreatedEvent(
         Long userId,
         String status,
         BigDecimal paymentAmount,
-        Instant timestamp) {
+        Instant createdAt) {
 
     public static final String EVENT_TYPE = "CREATE_PAYMENT";
 
-    public PaymentCreatedEvent(Long orderId, Long userId, String status, BigDecimal paymentAmount, Instant timestamp) {
-        this(EVENT_TYPE, orderId, userId, status, paymentAmount, timestamp);
+    public PaymentCreatedEvent(Long orderId, Long userId, String status, BigDecimal paymentAmount, Instant createdAt) {
+        this(EVENT_TYPE, orderId, userId, status, paymentAmount, createdAt);
     }
 }

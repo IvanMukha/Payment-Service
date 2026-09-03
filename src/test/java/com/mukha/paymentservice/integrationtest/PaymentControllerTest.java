@@ -210,7 +210,7 @@ class PaymentControllerTest extends AbstractIntegrationTest {
         payment.setOrderId(orderId);
         payment.setUserId(userId);
         payment.setStatus(status);
-        payment.setTimestamp(Instant.now());
+        payment.setCreatedAt(Instant.now());
         payment.setPaymentAmount(amount);
         paymentRepository.save(payment);
     }

@@ -16,7 +16,7 @@ public record PaymentResponse(
 
         PaymentStatus status,
 
-        Instant timestamp,
+        Instant createdAt,
 
         BigDecimal paymentAmount) {
 

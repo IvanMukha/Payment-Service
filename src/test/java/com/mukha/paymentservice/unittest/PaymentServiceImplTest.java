@@ -73,7 +73,7 @@ class PaymentServiceImplTest {
         savedPayment.setOrderId(1L);
         savedPayment.setUserId(2L);
         savedPayment.setPaymentAmount(BigDecimal.valueOf(100));
-        savedPayment.setTimestamp(Instant.now());
+        savedPayment.setCreatedAt(Instant.now());
 
         paymentResponse = new PaymentResponse(new ObjectId(), 1L, 2L, PaymentStatus.SUCCESS, Instant.now(), BigDecimal.valueOf(100));
     }
@@ -132,7 +132,7 @@ class PaymentServiceImplTest {
 
         paymentService.createPayment(createPaymentRequest);
 
-        assertThat(payment.getTimestamp()).isNotNull();
+        assertThat(payment.getCreatedAt()).isNotNull();
     }
 
     @Test
@@ -154,7 +154,7 @@ class PaymentServiceImplTest {
         assertThat(capturedEvent.userId()).isEqualTo(savedPayment.getUserId());
         assertThat(capturedEvent.status()).isEqualTo(savedPayment.getStatus().name());
         assertThat(capturedEvent.paymentAmount()).isEqualTo(savedPayment.getPaymentAmount());
-        assertThat(capturedEvent.timestamp()).isEqualTo(savedPayment.getTimestamp());
+        assertThat(capturedEvent.createdAt()).isEqualTo(savedPayment.getCreatedAt());
     }
 
     @Test

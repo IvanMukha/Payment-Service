@@ -33,7 +33,7 @@ public class Payment {
     private PaymentStatus status;
 
     @Field("timestamp")
-    private Instant timestamp;
+    private Instant createdAt;
 
     @Field(name = "payment_amount", targetType = FieldType.DECIMAL128)
     private BigDecimal paymentAmount;

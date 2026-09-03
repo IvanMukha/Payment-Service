@@ -36,7 +36,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         Payment payment = paymentMapper.toEntity(createPaymentRequest);
         payment.setStatus(paymentStatus);
-        payment.setTimestamp(Instant.now());
+        payment.setCreatedAt(Instant.now());
 
         Payment result = paymentRepository.save(payment);
         log.debug("Successfully create payment with id: {}", result.getId());
@@ -46,7 +46,7 @@ public class PaymentServiceImpl implements PaymentService {
                 result.getUserId(),
                 result.getStatus().name(),
                 result.getPaymentAmount(),
-                result.getTimestamp()));
+                result.getCreatedAt()));
 
         return paymentMapper.toResponse(result);
     }

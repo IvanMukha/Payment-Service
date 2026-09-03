@@ -34,7 +34,6 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentStatus paymentStatus = Integer.parseInt(randomNumber) % 2 == 0 ?
                 PaymentStatus.SUCCESS : PaymentStatus.FAILED;
 
-        log.debug("Attempting to save new Payment");
         Payment payment = paymentMapper.toEntity(createPaymentRequest);
         payment.setStatus(paymentStatus);
         payment.setTimestamp(Instant.now());
